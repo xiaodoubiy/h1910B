@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.DevicetypeMapper">
+
+<select id="findUserPage" parameterType="devicetypeVo" resultType="devicetypeVo">
+select * from tb_device,device_type
+<where>
+tb_device.typeid=device_type.typeid
+<if test="devicename!=null and devicename!=''">
+and devicename like '%${devicename}%'
+</if>
+<if test="status!=null and status!=''">
+and tb_device.status=#{status}
+</if>
+</where>
+
+</select>
+<select id="existdeviceWithdeviceName" parameterType="string" resultType="devicetype">
+
+select * from tb_device where devicename=#{devicename}
+
+</select>
+<update id="updateDevice" parameterType="devicetype">
+update tb_device set devicename=#{devicename},typeid=#{typeid},deviceram=#{deviceram},color=#{color},price=#{price},status=#{status},createtime=#{createtime} where id=#{id}
+
+</update>
+<insert id="addDevice" parameterType="devicetype" useGeneratedKeys="true" keyProperty="id">
+insert into tb_device values(null,#{devicename},#{typeid},#{deviceram},#{color},#{price},#{status},#{createtime})
+</insert>
+<delete id="deleteDevice" parameterType="int">
+delete from tb_device where id=#{id}
+</delete>
+<select id="echartsAll" resultType="devicetypeVo">
+select device_type.typename,count(tb_device.id) as num from device_type left join tb_device on device_type.typeid=tb_device.typeid group by device_type.typename 
+</select>
+</mapper>
