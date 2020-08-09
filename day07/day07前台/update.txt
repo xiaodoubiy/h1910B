@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增用户</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    <input type="hidden" v-model="emp.eid"/><br />
+    用户名：<input v-model="emp.ename"/><br />
+    性别：<input type="radio" v-model="emp.sex" name="sex" value="男" />男
+        <input type="radio" v-model="emp.sex" name="sex" value="女" />女<br />
+    爱好：<input v-model="emp.hobby" /><br />
+    生日：<input type="date" v-model="emp.birthday" /><br />
+    <img width="100px" height="100px" :src="emp.img" /><br />
+    <input type="hidden" v-model="img" />
+    头像：<input type="file" @change="getfile($event)" /><br />
+    部门：<select v-model="emp.did">
+            <option v-for="d in list" :value="d.did">{{d.dname}}</option>
+         </select>
+    <br />
+<button @click="updateemp">提交</button>
+</div>
+</body>
+<script>
+    var app=new Vue({
+        el:"#app",
+        data:{
+            list:[],
+            emp:{
+                did:1
+            },
+            img:"",
+            imgfile:{}
+        },
+        methods:{
+            getDept(){
+                var that=this;
+                axios.post("http://localhost:8080/ssmvue/emp/querydept.action").then(function(res){
+                    that.list=res.data;
+                });
+            },
+            getfile(event){
+
+                this.imgfile=event.target.files[0];
+                console.log(this.imgfile);
+            },
+            rqjt(event){
+                console.log(event.target);
+            },
+            zhundate(date){
+                var d=new Date(date);
+                var yue=(d.getMonth()+1);
+                if(yue<10){
+                    yue="0"+yue;
+                }
+                var ri=d.getDate();
+                if(ri<10){
+                    ri="0"+ri;
+                }
+                var rq=d.getFullYear()+"-"+yue+"-"+ri;
+
+                return rq;
+            },
+            updateemp(){
+                //图片上传
+                //图片是以表单的形式上传的。因为图片要以表单的形式上传，所以，其他数据也得以表单的形式上传
+                var form=new FormData();
+                form.append("pic",this.imgfile);
+                form.append("eid",this.emp.eid);
+                form.append("ename",this.emp.ename);
+                form.append("sex",this.emp.sex);
+                form.append("hobby",this.emp.hobby);
+                form.append("birthday",this.emp.birthday);
+                form.append("did",this.emp.did);
+                form.append("img",this.img);
+                var config={
+                    headers:{"Content-Type":"multipart/form-data"}
+                }
+                axios.post("http://localhost:8080/ssmvue/emp/updateemp.action",form,config).then(function(res){
+                    location.href="queryemp.html";
+                })
+            }
+        },
+        watch:{
+
+        },
+        created(){
+            console.log(location.search);
+            var id=location.search.substring(5);
+
+
+            var that=this;
+            axios.post("http://localhost:8080/ssmvue/emp/queryByEid.action?eid="+id).then(function(res){
+                that.emp=res.data;
+                that.img=that.emp.img;
+                that.emp.img="http://localhost:8080/pic/"+that.emp.img;
+                that.emp.birthday=that.zhundate(that.emp.birthday);
+
+            });
+
+            console.log(id);
+            this.getDept();
+        }
+    })
+</script>
+</html>

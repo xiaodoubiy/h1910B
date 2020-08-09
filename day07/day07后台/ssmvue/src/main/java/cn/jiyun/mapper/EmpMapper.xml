@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.jiyun.mapper.EmpMapper">
+<select id="queryEmp" parameterType="empVo" resultType="empVo">
+select e.*,d.dname dname from emp e,dept d
+<where>
+e.did=d.did
+<if test="ename!=null and ename!=''">
+ and e.ename like '%${ename}%'
+</if>
+order by e.eid asc
+</where>
+</select>
+<delete id="deleteEmp">
+	delete from emp 
+	<where>
+		<foreach collection="array" open="eid in(" close=")" item="eids" separator=",">
+			#{eids}
+		</foreach>
+	</where>
+</delete>
+</mapper>

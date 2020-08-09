@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增用户</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+<body>
+<div id="app">
+    用户名：<input v-model="emp.ename"/><br />
+    性别：<input type="radio" v-model="emp.sex" name="sex" value="男" />男
+        <input type="radio" v-model="emp.sex" name="sex" value="女" />女<br />
+    爱好：<input v-model="emp.hobby" /><br />
+    生日：<input v-model="emp.birthday" type="date" /><br />
+    头像：<input type="file" @change="getfile($event)" /><br />
+    部门：<select v-model="emp.did">
+            <option v-for="d in list" :value="d.did">{{d.dname}}</option>
+         </select>
+    <br />
+<button @click="addemp">提交</button>
+</div>
+</body>
+<script>
+    var app=new Vue({
+        el:"#app",
+        data:{
+            list:[],
+            emp:{
+                did:1
+            },
+            imgfile:{}
+        },
+        methods:{
+            getDept(){
+                var that=this;
+                axios.post("http://localhost:8080/ssmvue/emp/querydept.action").then(function(res){
+                    that.list=res.data;
+                });
+            },
+            getfile(event){
+
+                this.imgfile=event.target.files[0];
+                console.log(this.imgfile);
+            },
+            addemp(){
+                //图片上传
+                //图片是以表单的形式上传的。因为图片要以表单的形式上传，所以，其他数据也得以表单的形式上传
+                var form=new FormData();
+
+                form.append("ename",this.emp.ename);
+                form.append("sex",this.emp.sex);
+                form.append("hobby",this.emp.hobby);
+                form.append("pic",this.imgfile);
+                form.append("birthday",this.emp.birthday);
+                form.append("did",this.emp.did);
+                var config={
+                    headers:{"Content-Type":"multipart/form-data"}
+                }
+                axios.post("http://localhost:8080/ssmvue/emp/addemp.action",form,config).then(function(res){
+                    location.href="queryemp.html";
+                })
+            }
+        },
+        created(){
+
+            this.getDept();
+        }
+    })
+</script>
+</html>

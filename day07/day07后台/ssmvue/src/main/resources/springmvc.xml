@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
+
+	<!-- 把controller交给spring关联 -->
+	<context:component-scan base-package="cn.jiyun.controller"></context:component-scan>
+	<!--mvc:annotation-driven:
+    默认创建  RequestMappingHandlerMapping RequestMappingHandlerAdapter对象。
+    提供对json格式支持。
+    -->
+	<mvc:annotation-driven/>
+	
+	
+	
+	
+	<!-- 3-1：配置springmvc视图解析器 返回逻辑视图：index 视图解析器解析逻辑视图(解析出物理视图)：prefix(前缀)+逻辑视图+suffix(后缀)
+		解析物理视图：/webapp/jsp/index.jsp -->
+	<bean
+			class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/jsp/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	<!-- 文件上传 -->
+	<bean id="multipartResolver"
+		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为5MB -->
+		<property name="maxUploadSize">
+			<value>5242880</value>
+		</property>
+	</bean>
+	<!-- <mvc:interceptors>
+	     <mvc:interceptor>
+	         <mvc:mapping path="/**"/>
+	         <bean class="cn.jiyun.interceptor.UserInterceptor"/>
+	     </mvc:interceptor>
+	</mvc:interceptors> -->
+</beans>

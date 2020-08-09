@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>查询</title>
+
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <script src="node_modules/axios/dist/axios.js"></script>
+</head>
+
+<body>
+<div id="app">
+    请输入姓名：<input v-model="ev.ename" >
+    <button @click="search">搜索</button>
+    <button @click="toadd">新增</button>
+    <button @click="deletesome">批量删除</button>
+        <table width="100%" border="1px">
+            <tr>
+                <td>选择</td>
+                <td>编号</td>
+                <td>姓名</td>
+                <td>性别</td>
+                <td>爱好</td>
+                <td>头像</td>
+                <td>生日</td>
+                <td>部门</td>
+                <td>操作</td>
+            </tr>
+                <tr v-for="e in list">
+                    <td><input type="checkbox" v-model="eids" :value="e.eid"></td>
+                    <td>{{e.eid}}</td>
+                    <td>{{e.ename }}</td>
+                    <td>{{e.sex }}</td>
+                    <td>{{e.hobby }}</td>
+                    <td><img width="100px" height="100px" :src="e.img" /> </td>
+                    <td>{{zhundate(e.birthday)}}</td>
+                    <td>{{e.dname }}</td>
+                    <td>
+                        <a @click="tiao(e.eid)">修改</a>
+                        <a @click="sc(e.eid)">删除</a>
+                    </td>
+                </tr>
+        </table>
+
+    <button @click="jump(page.firstPage)">首页</button>
+    <button @click="jump(page.prePage)">上一页</button>
+    <button @click="jump(page.nextPage)">下一页</button>
+    <button @click="jump(page.lastPage)">尾页</button>
+
+</div>
+
+</body>
+<script>
+    var app=new Vue({
+        el:"#app",
+        data:{
+            eids:[],
+            list:[],
+            page:{},
+            ev:{}
+        },
+        methods:{
+            query(pagenum){
+                var zl=this;
+                axios.post("http://localhost:8080/ssmvue/emp/queryempfy.action?pageNum="+pagenum,this.ev).then(function(res){
+                    console.log(res);
+                    zl.page=res.data;
+                    zl.list=res.data.list;
+                    zl.list.forEach(function(emp){
+                        emp.img="http://localhost:8080/pic/"+emp.img;
+                    })
+                })
+            },
+            toadd(){
+                location.href="addemp.html";
+            },
+            deletesome(){
+                var zl=this;
+                axios.post("http://localhost:8080/ssmvue/emp/deltesome.action",zl.eids).then(function(res){
+                    location.href="queryemp.html";
+                });
+            },
+             jump(pagenum){
+
+                 this.query(pagenum);
+             },
+            search(){
+                this.query(this.page.pageNum);
+            },
+            tiao(id){
+              location.href="update.html?eid="+id;
+            },
+            zhundate(date){
+                var d=new Date(date);
+                var yue=(d.getMonth()+1);
+                if(yue<10){
+                    yue="0"+yue;
+                }
+                var ri=d.getDate();
+                if(ri<10){
+                    ri="0"+ri;
+                }
+                return d.getFullYear()+"-"+yue+"-"+ri;
+            },
+            sc(id){
+                axios.post("http://localhost:8080/ssmvue/emp/delete.action?eid="+id).then(function(res){
+                    location.href="queryemp.html";
+                })
+            }
+        },
+        created() {
+                this.query(1);
+        }
+    });
+
+</script>
+</html>
