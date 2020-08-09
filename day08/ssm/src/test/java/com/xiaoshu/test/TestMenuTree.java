@@ -20,12 +20,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@ContextConfiguration(locations = { "classpath:applicationContext.xml", "classpath:dispatcherServlet-servlet.xml" })
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@WebAppConfiguration
+//@ContextConfiguration(locations = { "classpath:applicationContext.xml", "classpath:dispatcherServlet-servlet.xml" })
 public class TestMenuTree {
 
-	@Autowired
+/*	@Autowired
 	private WebApplicationContext wac;
 
 	private MockMvc mockMvc;
@@ -59,5 +59,5 @@ public class TestMenuTree {
 		Date time = ca.getTime();
 		System.out.println(time);
 	}
-
+*/
 }

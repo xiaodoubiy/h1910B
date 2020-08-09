@@ -23,8 +23,8 @@
 		
 		<!-- 配置数据库连接 -->
 		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
-			connectionURL="jdbc:mysql://localhost:3306/zhoukao" userId="root"
-			password="111">
+			connectionURL="jdbc:mysql://localhost:3306/ssm" userId="root"
+			password="123">
 		</jdbcConnection>
 
 		<javaTypeResolver>
@@ -59,8 +59,8 @@
 		<table tableName="operation" domainObjectName="Operation"></table>
 		<table tableName="role" domainObjectName="Role"></table>
 		<table tableName="token" domainObjectName="Token"></table> -->
-		<table tableName="express_person" domainObjectName="Person"></table>
-		<table tableName="express_company" domainObjectName="Company"></table>
+		<table tableName="stu_tb" domainObjectName="Stu"></table>
+		<table tableName="major_tb" domainObjectName="Major"></table>
 		
 		<!-- 		<table tableName="log" domainObjectName="Log" enableSelectByExample="false" enableDeleteByExample="false" enableUpdateByExample="false"></table> -->
 <!-- 		<table tableName="attachment" domainObjectName="Attachment" enableSelectByExample="false" enableDeleteByExample="false" enableUpdateByExample="false"></table> -->

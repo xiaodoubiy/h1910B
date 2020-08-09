@@ -69,16 +69,16 @@ public class LoginController {
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 				return;
 			}
-//			if(StringUtil.isEmpty(imageCode)){
-//				request.setAttribute("error", "验证码为空");
-//				request.getRequestDispatcher("login.jsp").forward(request, response);
-//				return;
-//			}
-//			if(!imageCode.toUpperCase().equals(session.getAttribute("sRand").toString().toUpperCase())){
-//				request.setAttribute("error", "验证码错误");
-//				request.getRequestDispatcher("login.jsp").forward(request, response);
-//				return;
-//			}
+			if(StringUtil.isEmpty(imageCode)){
+				request.setAttribute("error", "验证码为空");
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+				return;
+			}
+			if(!imageCode.toUpperCase().equals(session.getAttribute("sRand").toString().toUpperCase())){
+				request.setAttribute("error", "验证码错误");
+				request.getRequestDispatcher("login.jsp").forward(request, response);
+				return;
+			}
 			User user = new User();
 			user.setUsername(userName);
 			user.setPassword(password);
