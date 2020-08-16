@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.StuMapper">
+<select id="findStuPage" parameterType="stuVo" resultType="stuVo">
+select s.*,c.name as cname from jiyun_student s,course c where s.course_id=c.id
+<if test="name!=null and name!=''">
+and s.name like '%${name}%'
+</if>
+<if test="grade!=null and grade!=''">
+and s.grade=#{grade}
+</if>
+<if test="begin!=null">
+and s.entrytime &gt;=#{begin}
+</if>
+<if test="end!=null">
+and s.entrytime &lt;=#{end}
+</if>
+</select>
+<select id="findEcharts" resultType="stuVo">
+select c.name as cname,COUNT(s.id) as num from course c LEFT JOIN jiyun_student s on c.id=s.course_id
+GROUP by c.id
+
+</select>
+</mapper>

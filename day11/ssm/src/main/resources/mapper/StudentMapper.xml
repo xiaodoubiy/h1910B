@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiaoshu.dao.StudentMapper">
+<select id="findStudentPage" parameterType="studentVo" resultType="studentVo">
+select s.*,c.cname as sname from student s,course c where s.courseid=c.courseid
+<if test="name!=null and name!=''">
+and s.name like '%${name}%'
+</if>
+<if test="begin!=null">
+and s.entrytime &gt;=#{begin}
+</if>
+<if test="end!=null">
+and s.entrytime &lt;=#{end}
+</if>
+<if test="courseid!=null and courseid!=0">
+and s.courseid=#{courseid}
+</if>
+</select>
+<select id="echartsgindAll" resultType="studentVo">
+SELECT
+ c.cname AS sname,
+ COUNT( s.id ) AS num 
+ FROM course c
+LEFT JOIN student s ON
+ c.courseid=s.courseid 
+ GROUP BY
+  c.courseid
+</select>
+</mapper>
